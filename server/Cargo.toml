@@ -4,16 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+dotenvy = "0.15.6"
+migration = { path = "./migration" }
 prost = "0.11.8"
+rcgen = "0.10.0"
+rustls = "0.20.8"
+rustls-native-certs = "0.6.2"
+sea-orm = { version = "^0", features = [ "sqlx-mysql", "runtime-tokio-rustls", "macros" ] }
+tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread", "fs"] }
 tonic = { version = "0.8.3", features = ["tls", "transport", "tls-roots", "tls-webpki-roots"] }
 tonic-web = "0.5"
-tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread", "fs"] }
-tracing-subscriber = "0.3"
 tower-http = { version = "0.4.0", features = ["cors"] }
-rcgen = "0.10.0"
-rustls-native-certs = "0.6.2"
-rustls = "0.20.8"
-sea-orm = { version = "^0", features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ] }
+tracing-subscriber = "0.3"
 
 [build-dependencies]
 tonic-build = "0.8.4"

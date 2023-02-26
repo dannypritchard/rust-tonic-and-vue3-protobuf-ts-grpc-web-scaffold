@@ -3,16 +3,22 @@ mod tls;
 
 extern crate rcgen;
 
+use dotenvy::dotenv;
+use migration::{Migrator, MigratorTrait};
+use protos::voting::{
+    voting_server::{Voting, VotingServer},
+    *,
+};
+use sea_orm::{Database, DatabaseConnection};
+use std::sync::Arc;
 use tonic::{transport::Server, Request, Response, Status};
 use tonic_web::GrpcWebLayer;
 use tower_http::cors::CorsLayer;
-use protos::voting::{
-    voting_server::{Voting, VotingServer},
-    *
-};
 
 #[derive(Default)]
-pub struct VotingService {}
+pub struct VotingService {
+    db: Arc<DatabaseConnection>,
+}
 
 #[tonic::async_trait]
 impl Voting for VotingService {
@@ -20,9 +26,8 @@ impl Voting for VotingService {
         &self,
         _request: Request<VotingIndexRequest>,
     ) -> Result<Response<VotingIndexResponse>, Status> {
-        Ok(Response::new(VotingIndexResponse {
-            votes: vec![],
-        }))
+        let votes = vec![];
+        Ok(Response::new(VotingIndexResponse { votes }))
     }
 
     async fn get(
@@ -53,6 +58,14 @@ impl Voting for VotingService {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
+    dotenv().ok();
+    let database_url = dotenvy::var("DATABASE_URL")?;
+
+    let db = Database::connect(database_url).await?;
+    Migrator::up(&db, None).await?;
+
+    let db = Arc::new(db);
+
     let addr = "127.0.0.1:8009".parse().unwrap();
 
     println!("Listening on {}", addr);
@@ -62,7 +75,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // .tls_config(tls::get_tls_config()?)?
         .layer(CorsLayer::permissive())
         .layer(GrpcWebLayer::new())
-        .add_service(VotingServer::new(VotingService::default()))
+        .add_service(VotingServer::new(VotingService {
+            db: Arc::clone(&db),
+        }))
         .serve(addr)
         .await?;
 
