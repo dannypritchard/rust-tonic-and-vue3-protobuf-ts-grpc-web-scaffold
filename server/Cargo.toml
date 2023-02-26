@@ -1,0 +1,19 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+prost = "0.11.8"
+tonic = { version = "0.8.3", features = ["tls", "transport", "tls-roots", "tls-webpki-roots"] }
+tonic-web = "0.5"
+tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread", "fs"] }
+tracing-subscriber = "0.3"
+tower-http = { version = "0.4.0", features = ["cors"] }
+rcgen = "0.10.0"
+rustls-native-certs = "0.6.2"
+rustls = "0.20.8"
+sea-orm = { version = "^0", features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ] }
+
+[build-dependencies]
+tonic-build = "0.8.4"

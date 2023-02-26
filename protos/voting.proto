@@ -1,0 +1,38 @@
+syntax = "proto3";
+package voting;
+
+message Vote {
+    int32 id = 1;
+    string url = 2;
+    int32 count = 3;
+}
+
+service Voting {
+    rpc Index (VotingIndexRequest) returns (VotingIndexResponse);
+    rpc Get (VotingGetRequest) returns (VotingGetResponse);
+    rpc Vote (VotingRequest) returns (VotingResponse);
+}
+
+message VotingIndexRequest {}
+message VotingIndexResponse {
+    repeated Vote votes = 1;
+}
+
+message VotingGetRequest {
+    int32 id = 1;
+}
+message VotingGetResponse {
+    Vote vote = 1;
+}
+message VotingRequest {
+    enum VoteValue {
+        UP = 0;
+        DOWN = 1;
+    }
+    VoteValue vote = 2;
+    string url = 1;
+}
+
+message VotingResponse {
+    string confirmation = 1;
+}
