@@ -55,9 +55,9 @@ impl Voting for VotingService {
 
     async fn get(
         &self,
-        _request: Request<VotingGetRequest>,
+        request: Request<VotingGetRequest>,
     ) -> Result<Response<VotingGetResponse>, Status> {
-        let vote = VoteEntity::find_by_id(1)
+        let vote = VoteEntity::find_by_id(request.into_inner().id)
             .one(&*Arc::clone(&self.db))
             .await
             .unwrap_or_default()

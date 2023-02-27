@@ -9,7 +9,7 @@ import { RouterLink, RouterView } from 'vue-router';
         </nav>
     </header>
 
-    <main>
+    <main class="justify-center">
         <RouterView />
     </main>
 </template>
