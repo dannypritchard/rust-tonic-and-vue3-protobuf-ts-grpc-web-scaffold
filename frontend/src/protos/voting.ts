@@ -17,9 +17,9 @@ import { MessageType } from "@protobuf-ts/runtime";
  */
 export interface Vote {
     /**
-     * @generated from protobuf field: optional int32 id = 1;
+     * @generated from protobuf field: int32 id = 1;
      */
-    id?: number;
+    id: number;
     /**
      * @generated from protobuf field: string url = 2;
      */
@@ -66,13 +66,13 @@ export interface VotingGetResponse {
  */
 export interface VotingRequest {
     /**
-     * @generated from protobuf field: string url = 1;
-     */
-    url: string;
-    /**
      * @generated from protobuf field: voting.VotingRequest.VoteValue vote = 2;
      */
     vote: VotingRequest_VoteValue;
+    /**
+     * @generated from protobuf field: string url = 1;
+     */
+    url: string;
 }
 /**
  * @generated from protobuf enum voting.VotingRequest.VoteValue
@@ -92,21 +92,21 @@ export enum VotingRequest_VoteValue {
  */
 export interface VotingResponse {
     /**
-     * @generated from protobuf field: string confirmation = 1;
+     * @generated from protobuf field: voting.Vote vote = 1;
      */
-    confirmation: string;
+    vote?: Vote;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Vote$Type extends MessageType<Vote> {
     constructor() {
         super("voting.Vote", [
-            { no: 1, name: "id", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ },
+            { no: 1, name: "id", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 2, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "count", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
         ]);
     }
     create(value?: PartialMessage<Vote>): Vote {
-        const message = { url: "", count: 0 };
+        const message = { id: 0, url: "", count: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Vote>(this, message, value);
@@ -117,7 +117,7 @@ class Vote$Type extends MessageType<Vote> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* optional int32 id */ 1:
+                case /* int32 id */ 1:
                     message.id = reader.int32();
                     break;
                 case /* string url */ 2:
@@ -138,8 +138,8 @@ class Vote$Type extends MessageType<Vote> {
         return message;
     }
     internalBinaryWrite(message: Vote, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* optional int32 id = 1; */
-        if (message.id !== undefined)
+        /* int32 id = 1; */
+        if (message.id !== 0)
             writer.tag(1, WireType.Varint).int32(message.id);
         /* string url = 2; */
         if (message.url !== "")
@@ -328,12 +328,12 @@ export const VotingGetResponse = new VotingGetResponse$Type();
 class VotingRequest$Type extends MessageType<VotingRequest> {
     constructor() {
         super("voting.VotingRequest", [
-            { no: 1, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "vote", kind: "enum", T: () => ["voting.VotingRequest.VoteValue", VotingRequest_VoteValue] }
+            { no: 2, name: "vote", kind: "enum", T: () => ["voting.VotingRequest.VoteValue", VotingRequest_VoteValue] },
+            { no: 1, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<VotingRequest>): VotingRequest {
-        const message = { url: "", vote: 0 };
+        const message = { vote: 0, url: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<VotingRequest>(this, message, value);
@@ -344,11 +344,11 @@ class VotingRequest$Type extends MessageType<VotingRequest> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string url */ 1:
-                    message.url = reader.string();
-                    break;
                 case /* voting.VotingRequest.VoteValue vote */ 2:
                     message.vote = reader.int32();
+                    break;
+                case /* string url */ 1:
+                    message.url = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -362,12 +362,12 @@ class VotingRequest$Type extends MessageType<VotingRequest> {
         return message;
     }
     internalBinaryWrite(message: VotingRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string url = 1; */
-        if (message.url !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.url);
         /* voting.VotingRequest.VoteValue vote = 2; */
         if (message.vote !== 0)
             writer.tag(2, WireType.Varint).int32(message.vote);
+        /* string url = 1; */
+        if (message.url !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.url);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -382,11 +382,11 @@ export const VotingRequest = new VotingRequest$Type();
 class VotingResponse$Type extends MessageType<VotingResponse> {
     constructor() {
         super("voting.VotingResponse", [
-            { no: 1, name: "confirmation", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "vote", kind: "message", T: () => Vote }
         ]);
     }
     create(value?: PartialMessage<VotingResponse>): VotingResponse {
-        const message = { confirmation: "" };
+        const message = {};
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<VotingResponse>(this, message, value);
@@ -397,8 +397,8 @@ class VotingResponse$Type extends MessageType<VotingResponse> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string confirmation */ 1:
-                    message.confirmation = reader.string();
+                case /* voting.Vote vote */ 1:
+                    message.vote = Vote.internalBinaryRead(reader, reader.uint32(), options, message.vote);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -412,9 +412,9 @@ class VotingResponse$Type extends MessageType<VotingResponse> {
         return message;
     }
     internalBinaryWrite(message: VotingResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string confirmation = 1; */
-        if (message.confirmation !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.confirmation);
+        /* voting.Vote vote = 1; */
+        if (message.vote)
+            Vote.internalBinaryWrite(message.vote, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

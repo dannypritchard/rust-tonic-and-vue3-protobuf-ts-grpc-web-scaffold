@@ -1,6 +1,6 @@
 #!/bin/bash
 ROOT="$(git rev-parse --show-toplevel)"
-IN_DIR="${ROOT}/protos/"
+IN_DIR="${ROOT}/server/_protos/"
 OUT_DIR="${ROOT}/frontend/src/protos/"
 
 mkdir -p $OUT_DIR

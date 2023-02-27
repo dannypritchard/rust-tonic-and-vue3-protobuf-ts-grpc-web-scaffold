@@ -1,0 +1,23 @@
+[package]
+name = "entity"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "entity"
+path = "src/mod.rs"
+
+[dependencies]
+sea-orm = "0.11.0"
+serde = "1.0.152"
+
+[dependencies.sea-orm-migration]
+version = "0.11.0"
+features = [
+  # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
+  # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
+  # e.g.
+  "runtime-tokio-rustls",  # `ASYNC_RUNTIME` feature
+  "sqlx-mysql",            # `DATABASE_DRIVER` feature
+]

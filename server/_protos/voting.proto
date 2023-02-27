@@ -34,5 +34,5 @@ message VotingRequest {
 }
 
 message VotingResponse {
-    string confirmation = 1;
+    Vote vote = 1;
 }
